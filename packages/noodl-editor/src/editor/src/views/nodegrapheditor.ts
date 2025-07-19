@@ -2368,7 +2368,7 @@ export class NodeGraphEditor extends View {
           if (this.isPointInsideNodes(scaledPos, this.selector.nodes)) {
             this.openRightClickMenu();
           } else {
-            this.showCreateNewNodePanel();
+            this.showCreateNewNodePanel({ source: 'editor' });
           }
         }
         this.rightClickPos = undefined;
@@ -2477,10 +2477,13 @@ export class NodeGraphEditor extends View {
     });
   }
 
-  public showCreateNewNodePanel() {
+  public showCreateNewNodePanel(options?: { source?: 'viewer' | 'editor'; selectedNodeId?: string }) {
     if (!this.model || this.readOnly) {
       return;
     }
+
+    const source = options?.source || 'editor';
+    const selectedNodeId = options?.selectedNodeId; // Get the ID
 
     if (
       CreateNewNodePanel.shouldShow({
@@ -2491,8 +2494,10 @@ export class NodeGraphEditor extends View {
       this.createNewNodePanel = new CreateNewNodePanel({
         model: this.model,
         parentModel: this.highlighted ? this.highlighted.model : undefined,
-        pos: this.latestMousePos, // Use the last known mouse position from the editor
-        runtimeType: this.runtimeType
+        pos: this.latestMousePos,
+        runtimeType: this.runtimeType,
+        source: source,
+        selectedNodeId: selectedNodeId
       });
       this.createNewNodePanel.render();
 

@@ -120,6 +120,8 @@ export class SidebarModel extends Model<SidebarModelEvent, SidebarModelEventEven
 
   private activeId: string;
   private previousActiveId: string;
+  private activeNodeId: string = null; // ADD THIS LINE
+
   private items: SidebarItem[] = [];
   private experimentalItems: SidebarItem[] = [];
 
@@ -206,6 +208,10 @@ export class SidebarModel extends Model<SidebarModelEvent, SidebarModelEventEven
       return this.panels[this.activeId];
     }
     return null;
+  }
+
+  public getActiveNodeId(): string {
+    return this.activeNodeId;
   }
 
   public getItems(): readonly SidebarItem[] {
@@ -317,6 +323,7 @@ export class SidebarModel extends Model<SidebarModelEvent, SidebarModelEventEven
       })
     );
     this.notifyListeners(SidebarModelEvent.nodeSelected, nodeModel.id);
+    this.activeNodeId = nodeModel.id;
   }
 
   /**
@@ -329,6 +336,7 @@ export class SidebarModel extends Model<SidebarModelEvent, SidebarModelEventEven
   }
 
   public hidePanels() {
+    this.activeNodeId = null;
     if (this.previousActiveId) {
       this.switch(this.previousActiveId);
       this.previousActiveId = undefined;

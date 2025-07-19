@@ -289,7 +289,12 @@ function EditorDocument() {
               }))
             );
           } else {
-            nodeGraph.showCreateNewNodePanel();
+            const currentNodeId = SidebarModel.instance.getActiveNodeId();
+
+            nodeGraph.showCreateNewNodePanel({
+              source: 'viewer',
+              selectedNodeId: currentNodeId
+            });
           }
         }
       },

@@ -1,6 +1,10 @@
+import { INodeType } from '@noodl-types/nodeTypes';
+import { ComponentModel } from '@noodl-models/componentmodel';
 import { NodeGraphModel, NodeGraphNode } from '@noodl-models/nodegraphmodel';
 import { INodeIndexCategory } from '@noodl-utils/createnodeindex';
 import { guid } from '@noodl-utils/utils';
+
+// ADD THIS IMPORT
 
 import { CommentFillStyle } from '../CommentLayer/CommentLayerView';
 
@@ -60,33 +64,44 @@ export function parseNodeObject(nodeTypes: TSFixme[], model: TSFixme, parentMode
 
 export function createNodeFunction(
   model: NodeGraphModel,
-  parentModel: NodeGraphNode,
-  pos: TSFixme,
-  attachToRoot: boolean
+  parentModelFromPicker: NodeGraphNode,
+  pos: { x: number; y: number },
+  attachToRoot: boolean,
+  selectedNodeId?: string
 ) {
-  return (type: TSFixme) => {
-    const node = NodeGraphNode.fromJSON({
+  // --- CHANGE 2: Update the parameter type from ComponentModel to INodeType ---
+  return function (type: INodeType) {
+    const newNode = NodeGraphNode.fromJSON({
       type: type.name,
-      version: type.version,
       x: pos.x,
       y: pos.y,
       id: guid()
     });
 
-    if (parentModel) {
-      parentModel.addChild(node, { undo: true, label: 'create' });
-    } else if (attachToRoot) {
-      for (const root of model.roots) {
-        if (root.canAcceptChildren([node])) {
-          root.addChild(node, { undo: true, label: 'create' });
+    // If a node is selected in the viewer, use smart placement logic
+    if (selectedNodeId) {
+      const selectedNode = model.findNodeWithId(selectedNodeId);
+      if (selectedNode) {
+        // Rule 1: Try to add as a child
+        if (selectedNode.canAcceptChildren([newNode])) {
+          selectedNode.addChild(newNode, { undo: true, label: 'create child' });
+          return;
+        }
+
+        // Rule 2: If it can't be a child, add as a sibling
+        if (selectedNode.parent) {
+          selectedNode.parent.addChild(newNode, { undo: true, label: 'create sibling' });
+          return;
         }
       }
+    }
 
-      if (node.parent === undefined)
-        // Couldn't find compatiable root
-        model.addRoot(node, { undo: true, label: 'create' });
+    // Rule 3 (Fallback): Use the original logic if no node is selected
+    // or if the selected node was invalid.
+    if (parentModelFromPicker && !attachToRoot) {
+      parentModelFromPicker.addChild(newNode, { undo: true, label: 'create' });
     } else {
-      model.addRoot(node, { undo: true, label: 'create' });
+      model.addRoot(newNode, { undo: true, label: 'create' });
     }
   };
 }

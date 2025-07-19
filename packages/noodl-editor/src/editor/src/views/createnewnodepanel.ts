@@ -17,6 +17,8 @@ export interface CreateNewNodePanelOptions {
   attachToRoot?: boolean;
   pos: IVector2;
   runtimeType: string;
+  source?: 'viewer' | 'editor';
+  selectedNodeId?: string;
 }
 
 export class CreateNewNodePanel extends View {
@@ -25,6 +27,8 @@ export class CreateNewNodePanel extends View {
   attachToRoot: boolean;
   pos: IVector2;
   runtimeType: string;
+  source: 'viewer' | 'editor';
+  selectedNodeId: string;
 
   static shouldShow(context: { component: ComponentModel; parentModel: NodeGraphNode }) {
     const nodeTypes = NodeLibrary.instance.getNodeTypes();
@@ -51,7 +55,8 @@ export class CreateNewNodePanel extends View {
     this.attachToRoot = !!args.attachToRoot;
     this.pos = args.pos;
     this.runtimeType = args.runtimeType;
-
+    this.source = args.source || 'editor';
+    this.selectedNodeId = args.selectedNodeId;
     // console.log(`Debug: Open Node Picker (runtime: ${args.runtimeType})`);
   }
 
@@ -66,7 +71,9 @@ export class CreateNewNodePanel extends View {
       parentModel: this.parentModel,
       pos: this.pos,
       attachToRoot: this.attachToRoot,
-      runtimeType: this.runtimeType
+      runtimeType: this.runtimeType,
+      source: this.source,
+      selectedNodeId: this.selectedNodeId
     };
 
     // hide viwer first...

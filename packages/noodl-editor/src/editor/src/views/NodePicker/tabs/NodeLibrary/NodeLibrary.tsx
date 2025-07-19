@@ -1,6 +1,6 @@
 // C:\projects\noodl\packages\noodl-editor\src\editor\src\views\NodePicker\tabs\NodeLibrary\NodeLibrary.tsx
 import classNames from 'classnames';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { platform } from '@noodl/platform';
 
 import { NodeGraphModel, NodeGraphNode } from '@noodl-models/nodegraphmodel';
@@ -40,9 +40,19 @@ export interface NodeLibraryProps {
   pos: TSFixme;
   attachToRoot: boolean;
   runtimeType: RuntimeType;
+  source?: 'viewer' | 'editor';
+  selectedNodeId?: string;
 }
 
-export function NodeLibrary({ model, parentModel, pos, attachToRoot, runtimeType }: NodeLibraryProps) {
+export function NodeLibrary({
+  model,
+  parentModel,
+  pos,
+  attachToRoot,
+  runtimeType,
+  source,
+  selectedNodeId
+}: NodeLibraryProps) {
   // const defaultDocsCards = useGetDefaultDocs();
   const news = useGetSliderNews();
 
@@ -62,7 +72,7 @@ export function NodeLibrary({ model, parentModel, pos, attachToRoot, runtimeType
     disableCollapseTransition
   } = useKeyboardCursor(renderedNodes);
 
-  const createNode = createNodeFunction(model, parentModel, pos, attachToRoot);
+  const createNode = createNodeFunction(model, parentModel, pos, attachToRoot, selectedNodeId);
 
   const searchInput = useRef<HTMLInputElement>(null);
 
@@ -76,7 +86,19 @@ export function NodeLibrary({ model, parentModel, pos, attachToRoot, runtimeType
     handleSearchUpdate
   );
 
+  useEffect(() => {
+    if (source === 'viewer') {
+      openAllCategories();
+    }
+  });
+
+  const coreNodes =
+    source === 'viewer'
+      ? renderedNodes.coreNodes?.filter((category) => category.name === 'UI Elements')
+      : renderedNodes.coreNodes;
+
   //TODO: make this fit better into the NodePicker structure
+
   let showCommentAction = true;
   if (searchInput.current && searchInput.current.value.length > 0) {
     showCommentAction = 'comments'.includes(searchInput.current.value.toLowerCase());
@@ -84,14 +106,16 @@ export function NodeLibrary({ model, parentModel, pos, attachToRoot, runtimeType
 
   return (
     <div className={css['Root']}>
-      <div className={css['SearchContainer']}>
-        <SearchInput
-          placeholder="Search for nodes and components"
-          inputRef={searchInput}
-          onChange={setSearchTerm}
-          onClick={() => focusSearch()}
-        />
-      </div>
+      {source !== 'viewer' && (
+        <div className={css['SearchContainer']}>
+          <SearchInput
+            placeholder="Search for nodes and components"
+            inputRef={searchInput}
+            onChange={setSearchTerm}
+            onClick={() => focusSearch()}
+          />
+        </div>
+      )}
       <div className={css['Content']}>
         <nav
           className={classNames([css['Navbar'], css['ScrollableContainer']])}
@@ -101,7 +125,7 @@ export function NodeLibrary({ model, parentModel, pos, attachToRoot, runtimeType
           <div className={css['NavbarInner']}>
             <div>
               <NodePickerSection key="Core nodes" title="Core nodes">
-                {renderedNodes.coreNodes?.map((category) => (
+                {coreNodes?.map((category) => (
                   <NodePickerCategory
                     key={category.name}
                     title={category.name}
@@ -132,7 +156,7 @@ export function NodeLibrary({ model, parentModel, pos, attachToRoot, runtimeType
                 ))}
               </NodePickerSection>
 
-              {renderedNodes.customNodes.length ? (
+              {source !== 'viewer' && renderedNodes.customNodes.length ? (
                 <NodePickerSection key="Custom nodes" title="Custom nodes">
                   {renderedNodes.customNodes?.map((category) => (
                     <NodePickerCategory
@@ -172,7 +196,7 @@ export function NodeLibrary({ model, parentModel, pos, attachToRoot, runtimeType
               ) : null}
             </div>
 
-            {showCommentAction ? (
+            {source !== 'viewer' && showCommentAction ? (
               <NodePickerSection key="Other" title="Other">
                 <NodePickerOtherItem
                   title="Comment"
