@@ -1,3 +1,4 @@
+// C:\projects\noodl\packages\noodl-editor\src\editor\src\views\VisualCanvas\VisualCanvas.tsx
 import { useThrottle } from '@noodl-hooks/useThrottleState';
 import React, { useEffect, useRef, useState } from 'react';
 

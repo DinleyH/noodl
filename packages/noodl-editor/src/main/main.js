@@ -1,3 +1,4 @@
+// C:\projects\noodl\packages\noodl-editor\src\main\main.js
 const electron = require('electron');
 const { app, dialog } = electron;
 const fs = require('fs');

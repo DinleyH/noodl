@@ -1,3 +1,5 @@
+// C:\projects\noodl\packages\noodl-editor\src\editor\src\models\nodelibrary\nodelibrary.ts
+
 import _ from 'underscore';
 
 import { ComponentModel } from '@noodl-models/componentmodel';

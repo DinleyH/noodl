@@ -695,6 +695,19 @@ export class NodeGraphEditorNode {
         (text, x, y) => ctx.fillText(text, x, y)
       );
 
+      if (this.model.type.category) {
+        ctx.save(); // Save the current state
+        ctx.font = '600 10px Inter-Regular'; // Make the font a bit smaller and bolder
+        ctx.textAlign = 'right'; // Align text to the right
+        ctx.globalAlpha = 0.65; // Make it slightly transparent
+        ctx.fillText(
+          this.model.type.category, // Get the category name from the node's type
+          x + this.nodeSize.width - horizontalSpacing, // X position (top right)
+          y + NodeGraphEditorNode.verticalSpacing + 6 // Y position (aligned with title)
+        );
+        ctx.restore(); // Restore to previous state (textAlign, etc.)
+      }
+
       //If this node has a label set by the user, render the type name as a sub label
       if (hasUserLabel) {
         ctx.save();

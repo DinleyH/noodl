@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { NodeLibrary } from '@noodl-models/nodelibrary';
+
 import { INodeType, INodeColorScheme } from '@noodl-types/nodeTypes';
+import { NodeLibrary } from '@noodl-models/nodelibrary';
+
 import { EditorNode } from '@noodl-core-ui/components/common/EditorNode';
 
 // TODO: Move this interface somewhere better

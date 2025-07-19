@@ -1,3 +1,4 @@
+// C:\projects\noodl\packages\noodl-editor\src\frames\viewer-frame\src\views\viewer.js
 const View = require('../../../../shared/view');
 const Config = require('../../../../shared/config/config');
 const ViewerTemplate = require('../templates/viewer.html');

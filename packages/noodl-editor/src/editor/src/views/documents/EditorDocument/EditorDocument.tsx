@@ -1,3 +1,5 @@
+// C:\projects\noodl\packages\noodl-editor\src\editor\src\views\documents\EditorDocument\EditorDocument.tsx
+
 import { useNodeGraphContext } from '@noodl-contexts/NodeGraphContext/NodeGraphContext';
 import { useKeyboardCommands } from '@noodl-hooks/useKeyboardCommands';
 import usePrevious from '@noodl-hooks/usePrevious';
@@ -287,14 +289,7 @@ function EditorDocument() {
               }))
             );
           } else {
-            const items = components.map((node) => ({
-              label: node.owner.owner.name + ' - ' + node.label,
-              onClick: () => {
-                const component = node.owner.owner;
-                nodeGraph.switchToComponent(component, { node: node, pushHistory: true });
-              }
-            }));
-            showContextMenuInPopup({ title: 'Nodes behind cursor', items, width: MenuDialogWidth.Large });
+            nodeGraph.showCreateNewNodePanel();
           }
         }
       },

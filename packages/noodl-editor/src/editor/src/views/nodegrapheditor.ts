@@ -1,3 +1,5 @@
+// C:\projects\noodl\packages\noodl-editor\src\editor\src\views\nodegrapheditor.ts
+
 import { clipboard, ipcRenderer } from 'electron';
 import _ from 'underscore';
 import React from 'react';
@@ -2365,39 +2367,12 @@ export class NodeGraphEditor extends View {
 
           if (this.isPointInsideNodes(scaledPos, this.selector.nodes)) {
             this.openRightClickMenu();
-          } else if (
-            CreateNewNodePanel.shouldShow({
-              component: this.model.owner,
-              parentModel: this.highlighted ? this.highlighted.model : undefined
-            })
-          ) {
-            this.createNewNodePanel = new CreateNewNodePanel({
-              model: this.model,
-              parentModel: this.highlighted ? this.highlighted.model : undefined,
-              pos: scaledPos,
-              runtimeType: this.runtimeType
-            });
-            this.createNewNodePanel.render();
-
-            PopupLayer.instance.showPopup({
-              content: this.createNewNodePanel,
-              /*attachToPoint:{x:pos.pageX, y:pos.pageY},*/
-              position: 'screen-center',
-              isBackgroundDimmed: true,
-              onClose: () => this.createNewNodePanel.dispose()
-            });
           } else {
-            PopupLayer.instance.showTooltip({
-              x: evt.pageX,
-              y: evt.pageY,
-              position: 'bottom',
-              content: 'This node type cannot have children.'
-            });
+            this.showCreateNewNodePanel();
           }
         }
         this.rightClickPos = undefined;
       }
-
       // Start multi select, move is handled in the do dragging function
       if (
         !this.readOnly &&
@@ -2500,6 +2475,42 @@ export class NodeGraphEditor extends View {
       width: MenuDialogWidth.Default,
       renderDirection: DialogRenderDirection.Horizontal
     });
+  }
+
+  public showCreateNewNodePanel() {
+    if (!this.model || this.readOnly) {
+      return;
+    }
+
+    if (
+      CreateNewNodePanel.shouldShow({
+        component: this.model.owner,
+        parentModel: this.highlighted ? this.highlighted.model : undefined
+      })
+    ) {
+      this.createNewNodePanel = new CreateNewNodePanel({
+        model: this.model,
+        parentModel: this.highlighted ? this.highlighted.model : undefined,
+        pos: this.latestMousePos, // Use the last known mouse position from the editor
+        runtimeType: this.runtimeType
+      });
+      this.createNewNodePanel.render();
+
+      PopupLayer.instance.showPopup({
+        content: this.createNewNodePanel,
+        position: 'screen-center',
+        isBackgroundDimmed: true,
+        onClose: () => this.createNewNodePanel.dispose()
+      });
+    } else {
+      // Optional: show a tooltip if no nodes can be created
+      PopupLayer.instance.showTooltip({
+        x: this.rightClickPos.pageX,
+        y: this.rightClickPos.pageY,
+        position: 'bottom',
+        content: 'This node type cannot have children.'
+      });
+    }
   }
 
   layoutAndPaint() {

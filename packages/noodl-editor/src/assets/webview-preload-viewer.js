@@ -1,3 +1,4 @@
+// C:\projects\noodl\packages\noodl-editor\src\assets\webview-preload-viewer.js
 const { ipcRenderer, contextBridge } = require('electron');
 
 contextBridge.exposeInMainWorld('NoodlEditor', {
@@ -5,7 +6,7 @@ contextBridge.exposeInMainWorld('NoodlEditor', {
     makeEditorAPIRequest('keyDown', event, cb);
   },
   inspectNodes(nodeIds, cb) {
-    makeEditorAPIRequest('inspectNodes', {nodeIds}, cb);
+    makeEditorAPIRequest('inspectNodes', { nodeIds }, cb);
   }
 });
 

@@ -1,3 +1,4 @@
+// C:\projects\noodl\packages\noodl-editor\src\editor\src\views\createnewnodepanel.ts
 import { ipcRenderer } from 'electron';
 import React from 'react';
 import ReactDOM from 'react-dom';

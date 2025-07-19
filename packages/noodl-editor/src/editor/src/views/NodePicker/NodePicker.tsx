@@ -1,3 +1,5 @@
+// C:\projects\noodl\packages\noodl-editor\src\editor\src\views\NodePicker\NodePicker.tsx
+
 import classNames from 'classnames';
 import React from 'react';
 

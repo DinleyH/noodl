@@ -1,3 +1,4 @@
+// C:\projects\noodl\packages\noodl-editor\src\editor\src\views\VisualCanvas\ShowInspectMenu.tsx
 import { getCurrentWindow, screen } from '@electron/remote';
 import React from 'react';
 import ReactDOM from 'react-dom';

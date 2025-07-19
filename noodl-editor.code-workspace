@@ -3,6 +3,58 @@
     {
       "path": "./",
       "name": "Monorepo"
+    },
+    {
+      "name": "noodl-runtime",
+      "path": "packages/noodl-runtime"
+    },
+    {
+      "name": "noodl-viewer-cloud",
+      "path": "packages/noodl-viewer-cloud"
+    },
+    {
+      "name": "ssr",
+      "path": "packages/noodl-viewer-react/static/ssr"
+    },
+    {
+      "name": "noodl-viewer-react",
+      "path": "packages/noodl-viewer-react"
+    },
+    {
+      "name": "noodl-platform",
+      "path": "packages/noodl-platform"
+    },
+    {
+      "name": "noodl-platform-electron",
+      "path": "packages/noodl-platform-electron"
+    },
+    {
+      "name": "noodl-types",
+      "path": "packages/noodl-types"
+    },
+    {
+      "name": "noodl-git",
+      "path": "packages/noodl-git"
+    },
+    {
+      "name": "noodl-platform-node",
+      "path": "packages/noodl-platform-node"
+    },
+    {
+      "name": "ssr",
+      "path": "packages/noodl-editor/src/external/ssr"
+    },
+    {
+      "name": "noodl-editor",
+      "path": "packages/noodl-editor"
+    },
+    {
+      "name": "noodl-parse-dashboard",
+      "path": "packages/noodl-parse-dashboard"
+    },
+    {
+      "name": "noodl-core-ui",
+      "path": "packages/noodl-core-ui"
     }
   ],
   "extensions": {
