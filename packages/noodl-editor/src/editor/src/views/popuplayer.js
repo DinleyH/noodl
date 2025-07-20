@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const KeyboardHandler = require('@noodl-utils/keyboardhandler').default;
 const { KeyCode } = require('@noodl-utils/keyboard/KeyCode');
 const View = require('../../../shared/view');

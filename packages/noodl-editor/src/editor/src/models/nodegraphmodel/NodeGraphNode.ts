@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-this-alias */
 import { each, filter, find, isEqual, some } from 'underscore';
 
 import { ComponentModel } from '@noodl-models/componentmodel';

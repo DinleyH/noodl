@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/no-this-alias */
+
 import { NodeGraphContextTmp } from '@noodl-contexts/NodeGraphContext/NodeGraphContext';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import _ from 'underscore';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -81,8 +84,11 @@ export class PropertyEditor extends View {
     }
   }
   renderHierarchy() {
-    // We can add logic here later if the section should only appear for certain nodes
-    ReactDOM.render(React.createElement(Hierarchy), this.$('.hierarchy')[0]);
+    const props = {
+      model: this.model // Pass the model as a prop
+    };
+
+    ReactDOM.render(React.createElement(Hierarchy, props), this.$('.hierarchy')[0]);
   }
   renderVisualStates() {
     if (this.model.type.visualStates !== undefined) {
