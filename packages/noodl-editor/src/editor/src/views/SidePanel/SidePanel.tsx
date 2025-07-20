@@ -1,3 +1,4 @@
+// C:\projects\noodl\packages\noodl-editor\src\editor\src\views\SidePanel\SidePanel.tsx
 import { nextTick } from 'process';
 import { useModernModel } from '@noodl-hooks/useModel';
 import React, { useState, useEffect } from 'react';

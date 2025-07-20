@@ -8,9 +8,7 @@ import css from './PanelHeader.module.scss';
 
 export interface PanelHeaderProps extends UnsafeStyleProps {
   title?: string;
-
   hasNoHeaderDivider?: boolean;
-
   children?: Slot;
 }
 

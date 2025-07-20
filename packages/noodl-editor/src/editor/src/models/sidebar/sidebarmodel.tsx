@@ -1,3 +1,4 @@
+// C:\projects\noodl\packages\noodl-editor\src\editor\src\models\sidebar\sidebarmodel.tsx
 import { NodeGraphContextTmp } from '@noodl-contexts/NodeGraphContext/NodeGraphContext';
 import React from 'react';
 
