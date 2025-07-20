@@ -1,3 +1,7 @@
+/* eslint-disable no-undef */
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/display-name */
 const React = require('react');
 const { useState, useEffect, useRef } = require('react');
 
