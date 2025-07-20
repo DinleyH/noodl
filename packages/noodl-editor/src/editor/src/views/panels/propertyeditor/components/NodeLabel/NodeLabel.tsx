@@ -31,51 +31,76 @@ export function NodeLabel({ model, showHelp = true }: NodeLabelProps) {
   const [isHierarchyOpen, setHierarchyOpen] = useState(false);
   const { nodeGraph } = useNodeGraphContext();
 
+  // ───────────────────────────────────────────────────────────────────────────────
+  //  Keep local `label` in sync with the node model, and clean up properly.
+  // ───────────────────────────────────────────────────────────────────────────────
   useEffect(() => {
-    const updateLabel = () => setLabel(model.label || model.type.name);
-    model.on('labelChanged', updateLabel, this);
+    const updateLabel = () => {
+      setLabel(model.label || model.type.name);
+    };
+    updateLabel();
+
+    // Use the handler itself as our "context" so we can unsubscribe cleanly.
+    model.on('labelChanged', updateLabel, updateLabel);
+
     return () => {
-      model.off(this);
+      // off(context) matches on(..., handler, context)
+      model.off(updateLabel);
     };
   }, [model]);
+  // ───────────────────────────────────────────────────────────────────────────────
 
   function getHierarchyItems() {
-    const items = [];
+    const items: Array<{ label: string; value: string; disabled?: boolean }> = [];
     const parent = model.parent;
 
     if (parent) {
-      items.push({ label: `[Parent] ${parent.label || parent.type.name}`, value: parent.id });
+      items.push({
+        label: `[Parent] ${parent.label || parent.type.name}`,
+        value: parent.id
+      });
       parent.children.forEach((child) => {
-        const labelPrefix = child.id === model.id ? '● ' : '  ';
-        items.push({ label: `${labelPrefix}${child.label || child.type.name}`, value: child.id });
+        const prefix = child.id === model.id ? '● ' : '  ';
+        items.push({
+          label: `${prefix}${child.label || child.type.name}`,
+          value: child.id
+        });
       });
     } else {
-      items.push({ label: `[Selected] ${model.label || model.type.name}`, value: model.id, disabled: true });
+      items.push({
+        label: `[Selected] ${model.label || model.type.name}`,
+        value: model.id,
+        disabled: true
+      });
       model.children.forEach((child) => {
-        items.push({ label: `  ${child.label || child.type.name}`, value: child.id });
+        items.push({
+          label: `  ${child.label || child.type.name}`,
+          value: child.id
+        });
       });
     }
+
     return items;
   }
 
   function handleNodeSelection(nodeId: string | number) {
     if (!nodeId || !nodeGraph) return;
 
-    const nodeModel = ProjectModel.instance.findNodeWithId(nodeId as string);
-    if (!nodeModel) return;
+    setTimeout(() => {
+      const nodeModel = ProjectModel.instance.findNodeWithId(nodeId as string);
+      if (!nodeModel) return;
 
-    const component = nodeModel.owner?.owner;
+      const component = nodeModel.owner?.owner;
 
-    if (component && component !== nodeGraph.getActiveComponent()) {
-      nodeGraph.switchToComponent(component, { pushHistory: true, node: nodeModel });
-    } else {
-      const nodeToSelect = nodeGraph.findNodeWithId(nodeId as string);
-
-      if (nodeToSelect) {
-        nodeGraph.selectNode(nodeToSelect);
-        SidebarModel.instance.switchToNode(nodeToSelect.model);
+      if (component && component !== nodeGraph.getActiveComponent()) {
+        nodeGraph.switchToComponent(component, { pushHistory: true, node: nodeModel });
+      } else {
+        const nodeToSelect = nodeGraph.findNodeWithId(nodeId as string);
+        if (nodeToSelect) {
+          nodeGraph.selectNode(nodeToSelect);
+        }
       }
-    }
+    }, 0);
 
     setHierarchyOpen(false);
   }
@@ -103,15 +128,10 @@ export function NodeLabel({ model, showHelp = true }: NodeLabelProps) {
   }
 
   useKeyboardCommands(() => [
-    {
-      handler: onOpenDocs,
-      keybinding: Keybindings.PROPERTY_PANEL_OPEN_DOCS.hash
-    },
+    { handler: onOpenDocs, keybinding: Keybindings.PROPERTY_PANEL_OPEN_DOCS.hash },
     {
       handler: () => {
-        if (!isEditingLabel) {
-          onEditLabel();
-        }
+        if (!isEditingLabel) onEditLabel();
       },
       keybinding: Keybindings.PROPERTY_PANEL_EDIT_LABEL.hash
     }
@@ -122,9 +142,7 @@ export function NodeLabel({ model, showHelp = true }: NodeLabelProps) {
       <div
         style={{ flexGrow: 1, overflow: 'hidden' }}
         onDoubleClick={() => {
-          if (!isEditingLabel) {
-            onEditLabel();
-          }
+          if (!isEditingLabel) onEditLabel();
         }}
       >
         {isHierarchyOpen ? (
@@ -145,9 +163,7 @@ export function NodeLabel({ model, showHelp = true }: NodeLabelProps) {
 
       {!isEditingLabel && (
         <div className="sidebar-panel-edit-bar hide-on-edit property-panel-header-edit-bar">
-          <div
-            style={{ width: '35px', height: '35px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-          >
+          <div style={{ width: 35, height: 35, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Tooltip content="Show Hierarchy">
               <IconButton
                 icon={isHierarchyOpen ? IconName.CaretUp : IconName.CaretDown}
@@ -159,9 +175,7 @@ export function NodeLabel({ model, showHelp = true }: NodeLabelProps) {
           </div>
 
           {showHelp && Boolean(model.type.docs) && (
-            <div
-              style={{ width: '35px', height: '35px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-            >
+            <div style={{ width: 35, height: 35, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <Tooltip content="Open Node Docs" fineType={Keybindings.PROPERTY_PANEL_OPEN_DOCS.label}>
                 <IconButton
                   icon={IconName.Question}
@@ -173,9 +187,7 @@ export function NodeLabel({ model, showHelp = true }: NodeLabelProps) {
             </div>
           )}
 
-          <div
-            style={{ width: '35px', height: '35px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-          >
+          <div style={{ width: 35, height: 35, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Tooltip content="Edit the node label" fineType={Keybindings.PROPERTY_PANEL_EDIT_LABEL.label}>
               <IconButton
                 icon={IconName.Pencil}
@@ -186,9 +198,7 @@ export function NodeLabel({ model, showHelp = true }: NodeLabelProps) {
             </Tooltip>
           </div>
 
-          <div
-            style={{ width: '35px', height: '35px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-          >
+          <div style={{ width: 35, height: 35, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Tooltip content="Delete the node" fineType={Keybindings.PROPERTY_PANEL_DELETE.label}>
               <IconButton
                 icon={IconName.Trash}

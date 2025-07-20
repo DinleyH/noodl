@@ -267,7 +267,8 @@ export class SidebarModel extends Model<SidebarModelEvent, SidebarModelEventEven
     // Debug info
     // let logText = `switch side panel to: '${id}'`;
     // if (this.activeId) logText += ` (from: ${this.activeId})`;
-    // console.log(logText);
+    // alert(logText);
+
     try {
       if (this.panels[id]) {
         const lastActiveTab = this.items.find((x) => x.id === this.activeId);
