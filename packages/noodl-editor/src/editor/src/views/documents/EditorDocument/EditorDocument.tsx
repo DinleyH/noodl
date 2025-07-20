@@ -1,5 +1,3 @@
-// C:\projects\noodl\packages\noodl-editor\src\editor\src\views\documents\EditorDocument\EditorDocument.tsx
-
 import { useNodeGraphContext } from '@noodl-contexts/NodeGraphContext/NodeGraphContext';
 import { useKeyboardCommands } from '@noodl-hooks/useKeyboardCommands';
 import usePrevious from '@noodl-hooks/usePrevious';
@@ -184,6 +182,10 @@ function EditorDocument() {
 
   useEffect(() => {
     if (!previewMode) {
+      const nodeToSelect = nodeGraph.findNodeWithId(selectedNodeId as string);
+      if (nodeToSelect) {
+        nodeGraph.selectNode(nodeToSelect);
+      }
       canvasView?.setNodeSelected(selectedNodeId);
       ipcRenderer.send('viewer-select-node', selectedNodeId);
     }

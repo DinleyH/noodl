@@ -1,4 +1,3 @@
-// C:\projects\noodl\packages\noodl-editor\src\editor\src\views\VisualCanvas\CanvasView.ts
 import { ipcRenderer } from 'electron';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -87,7 +86,9 @@ export class CanvasView extends View {
       const code = `
         document.addEventListener('keydown', (e) => {
           const hasFocusedElement = document.querySelector(':focus') ? true : false;
-          if (!hasFocusedElement && (e.metaKey || e.ctrlKey || e.shiftKey)) {
+          const isDeleteKey = e.key === 'Delete' || e.key === 'Backspace';
+
+          if (!hasFocusedElement && (e.metaKey || e.ctrlKey || e.shiftKey || isDeleteKey)) {
             NoodlEditor.keyDown({
               metaKey: e.metaKey,
               ctrlKey: e.ctrlKey,

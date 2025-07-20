@@ -1,4 +1,4 @@
-// C:\projects\noodl\packages\noodl-editor\src\editor\src\views\nodegrapheditor.ts
+
 
 import { clipboard, ipcRenderer } from 'electron';
 import _ from 'underscore';
