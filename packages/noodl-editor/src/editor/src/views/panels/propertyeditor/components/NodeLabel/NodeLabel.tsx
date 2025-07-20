@@ -61,10 +61,20 @@ export function NodeLabel({ model, showHelp = true }: NodeLabelProps) {
   function handleNodeSelection(nodeId: string | number) {
     if (!nodeId || !nodeGraph) return;
 
-    const nodeToSelect = nodeGraph.findNodeWithId(nodeId as string);
+    const nodeModel = ProjectModel.instance.findNodeWithId(nodeId as string);
+    if (!nodeModel) return;
 
-    if (nodeToSelect) {
-      nodeGraph.selectNode(nodeToSelect);
+    const component = nodeModel.owner?.owner;
+
+    if (component && component !== nodeGraph.getActiveComponent()) {
+      nodeGraph.switchToComponent(component, { pushHistory: true, node: nodeModel });
+    } else {
+      const nodeToSelect = nodeGraph.findNodeWithId(nodeId as string);
+
+      if (nodeToSelect) {
+        nodeGraph.selectNode(nodeToSelect);
+        SidebarModel.instance.switchToNode(nodeToSelect.model);
+      }
     }
 
     setHierarchyOpen(false);
