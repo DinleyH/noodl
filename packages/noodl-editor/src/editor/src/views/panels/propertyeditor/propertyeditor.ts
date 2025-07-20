@@ -9,6 +9,7 @@ import { UndoQueue, UndoActionGroup } from '@noodl-models/undo-queue-model';
 import View from '../../../../../shared/view';
 import { ProjectModel } from '../../../models/projectmodel';
 import { ToastLayer } from '../../ToastLayer/ToastLayer';
+import { Hierarchy } from './components/Hierarchy';
 import { VariantsEditor } from './components/VariantStates';
 import { VisualStates } from './components/VisualStates';
 import { Ports } from './DataTypes/Ports';
@@ -79,6 +80,10 @@ export class PropertyEditor extends View {
       ReactDOM.render(React.createElement(VariantsEditor, props), this.$('.variants')[0]);
     }
   }
+  renderHierarchy() {
+    // We can add logic here later if the section should only appear for certain nodes
+    ReactDOM.render(React.createElement(Hierarchy), this.$('.hierarchy')[0]);
+  }
   renderVisualStates() {
     if (this.model.type.visualStates !== undefined) {
       const props = {
@@ -104,6 +109,8 @@ export class PropertyEditor extends View {
     this.renderPortsView();
 
     this.renderVariantsEditor();
+
+    this.renderHierarchy();
 
     this.renderVisualStates();
 

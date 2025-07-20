@@ -1,0 +1,20 @@
+.hierarchy-section {
+  padding: 5px 10px;
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  min-height: 50px;
+  box-sizing: border-box;
+  border-bottom: 1px solid var(--theme-color-bg-1);
+}
+
+.hierarchy-name-section {
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+}
+
+.hierarchy-section label {
+  display: block;
+  color: var(--theme-color-fg-default);
+}
