@@ -1,10 +1,11 @@
-import { useNodeGraphContext } from '@noodl-contexts/NodeGraphContext/NodeGraphContext';
 import { useKeyboardCommands } from '@noodl-hooks/useKeyboardCommands';
 import React, { useEffect, useRef, useState } from 'react';
 import { platform } from '@noodl/platform';
 
 import { Keybindings } from '@noodl-constants/Keybindings';
 import { NodeGraphNode } from '@noodl-models/nodegraphmodel';
+import { ProjectModel } from '@noodl-models/projectmodel';
+import { SidebarModel } from '@noodl-models/sidebar';
 import getDocsEndpoint from '@noodl-utils/getDocsEndpoint';
 import { tracker } from '@noodl-utils/tracker';
 
@@ -13,9 +14,9 @@ import { IconButton, IconButtonVariant } from '@noodl-core-ui/components/inputs/
 import { Select } from '@noodl-core-ui/components/inputs/Select';
 import { TextInput, TextInputVariant } from '@noodl-core-ui/components/inputs/TextInput';
 import { Tooltip } from '@noodl-core-ui/components/popups/Tooltip';
-import { useOnClickOutside } from '@noodl-core-ui/hooks/useOnClickOutside';
 
 import { NodeGraphNodeDelete, NodeGraphNodeRename } from '../..';
+import { useNodeGraphContext } from '../../../../../contexts/NodeGraphContext/NodeGraphContext';
 
 export interface NodeLabelProps {
   model: NodeGraphNode;
@@ -28,9 +29,6 @@ export function NodeLabel({ model, showHelp = true }: NodeLabelProps) {
   const [label, setLabel] = useState(model.label || model.type.name);
 
   const [isHierarchyOpen, setHierarchyOpen] = useState(false);
-  const hierarchyRef = useRef<HTMLDivElement>(null);
-  useOnClickOutside(hierarchyRef, () => setHierarchyOpen(false));
-
   const { nodeGraph } = useNodeGraphContext();
 
   useEffect(() => {
@@ -42,7 +40,6 @@ export function NodeLabel({ model, showHelp = true }: NodeLabelProps) {
   }, [model]);
 
   function getHierarchyItems() {
-    if (!model) return [];
     const items = [];
     const parent = model.parent;
 
@@ -114,7 +111,6 @@ export function NodeLabel({ model, showHelp = true }: NodeLabelProps) {
     <div className="property-editor-label-and-buttons property-header-bar" style={{ flex: '0 0' }}>
       <div
         style={{ flexGrow: 1, overflow: 'hidden' }}
-        ref={hierarchyRef}
         onDoubleClick={() => {
           if (!isEditingLabel) {
             onEditLabel();
